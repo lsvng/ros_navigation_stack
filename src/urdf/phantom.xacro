@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+
+<robot name="SAMPLE_phantom" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="mass" value="50" />
+    <xacro:property name="width" value="0.5" />
+    <xacro:property name="height" value="0.5" />
+
+    <link name="base_footprint">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+        <box size="0.001 0.001 0.001" />
+        </geometry>
+    </visual>
+    </link>
+
+    <!-- Base Link -->
+    <link name="base_link">
+        <collision>
+            <origin xyz="0 0 0.0" />
+            <geometry>
+                <box size="${width} ${width} ${height}"/>
+            </geometry>
+        </collision>
+
+        <visual>
+            <geometry>
+                <box size="${width} ${width} ${height}"/>
+            </geometry>
+            <!-- <material name="black"/> -->
+        </visual>
+
+        <inertial>
+            <mass value="${mass}" />
+            <origin xyz="0 0 0.0" />
+            <inertia ixx="${mass}" ixy="0.0" ixz="0.0"
+                iyy="${mass}" iyz="0.0"
+                izz="${mass}" />
+        </inertial>
+    </link>
+
+    <link name="left_wheel">
+        <collision name="collision">
+            <origin xyz="0 0 0" rpy="0 1.5708 1.5708" />
+            <geometry>
+                <cylinder length="0.05" radius="0.1"/>
+            </geometry>
+        </collision>
+
+        <visual name="visual">
+            <origin xyz="0 0 0" rpy="0 1.5708 1.5708" />
+            <geometry>
+                <cylinder length="0.05" radius="0.1"/>
+            </geometry>
+        </visual>
+
+        <inertial>
+            <mass value="1"/>
+            <inertia
+                ixx="0.002708" ixy="0.0" ixz="0.0"
+                iyy="0.002708" iyz="0.0"
+                izz="0.005"/>
+        </inertial>
+    </link>
+
+    <link name="right_wheel">
+        <collision name="collision">
+            <origin xyz="0 0 0" rpy="0 1.5708 1.5708" />
+            <geometry>
+                <cylinder length="0.05" radius="0.1"/>
+            </geometry>
+        </collision>
+
+        <visual name="visual">
+            <origin xyz="0 0 0" rpy="0 1.5708 1.5708" />
+            <geometry>
+                <cylinder length="0.05" radius="0.1"/>
+            </geometry>
+        </visual>
+
+        <inertial>
+            <mass value="1"/>
+            <inertia
+                ixx="0.002708" ixy="0.0" ixz="0.0"
+                iyy="0.002708" iyz="0.0"
+                izz="0.005"/>
+            </inertial>
+    </link>
+
+    <!-- RPLIDAR A1 -->
+	<link name="base_laser">
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<box size="0.1 0.1 0.1"/>
+			</geometry>
+		</collision>
+
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<box size="0.1 0.1 0.1"/>
+				<!-- <meshfile name="package://BLAHPACKAGENAME/meshes/rplidar.dae" scale="0.001 0.001 0.001" /> -->
+			</geometry>			
+		</visual>
+
+		<inertial>
+			<mass value="1e-5"/>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+		</inertial>
+	</link>
+
+    <!-- Joint -->
+    <joint name="base_link_joint" type="fixed">
+        <origin xyz="0.0 0 0.0" rpy="0 0 0" />
+        <parent link="base_footprint"/>
+        <child link="base_link" />
+    </joint>
+    
+    <joint name="laser_joint" type="fixed">
+        <axis xyz="0 1 0"/>
+        <origin xyz="0 0 ${height + 0.002}" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="base_laser"/>
+    </joint>
+
+    <joint name="base_link_left_wheel_joint" type="continuous">
+        <parent link="base_link" />
+        <child link="left_wheel" />
+        <origin xyz="0 -0.175 0.1" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="base_link_right_wheel_joint" type="continuous">
+        <parent link="base_link" />
+        <child link="right_wheel" />
+        <origin xyz="0 0.175 0.1" rpy="0 0 0"/>
+    </joint>
+
+</robot>

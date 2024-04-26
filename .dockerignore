@@ -1,0 +1,7 @@
+# whitelist: ignore everything first!
+*
+
+# Files included to Docker COPY . .
+!qemu*
+!entrypoint.sh
+!src/
